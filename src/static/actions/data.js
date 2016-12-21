@@ -102,17 +102,19 @@ export function dataExecuteAsyncTask() {
                 dispatch(dataReceiveAsyncTask());
             })
             .catch((error) => {
+                let result;
                 if (error && error.response) {
-                    return error.response.json().then((data) => {
+                    result = error.response.json().then((data) => {
                         dispatch(dataReceiveAsyncTaskError(error.response.status, error.response.statusText));
                         dispatch(push('/login'));
                     });
                 } else {
                     dispatch(dataReceiveAsyncTaskError(
                         'Connection Error', 'An error occurred while sending your data!'));
+                    result = Promise.resolve();
                 }
 
-                return Promise.resolve(); // TODO: we need a promise here because of the tests, find a better way
+                return result;
             });
     };
 }
